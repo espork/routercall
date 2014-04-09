@@ -3,6 +3,8 @@ package com.alatest.routercall;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Operator {
 
@@ -21,6 +23,27 @@ public class Operator {
 		return name;
 	}
 	
+	public Tax getTaxtAt(int index){
+		return this.taxList.get(index);
+	}
+	
+	
+	public Tax getCheapestPrice(String phoneNumber) {
+		
+		Pattern pattern = null;
+		Matcher matcher = null;
+		
+		for(Tax tax : this.taxList){
+			
+			pattern = Pattern.compile("^"+tax.getPrefix());
+			matcher = pattern.matcher(phoneNumber);
+			
+			if(matcher.find()) return tax;
+		}
+			
+		return null;
+	}
+	
 	
 	public static class OperatorBuilder{
 		
@@ -34,25 +57,17 @@ public class Operator {
 		}
 		
 		public OperatorBuilder add(Tax tax) {
-			
 			this.operator.getTaxList().add(tax);
-			Collections.sort(this.operator.getTaxList());
-			
 			return this;
 		}
 		
 		public Operator build(){
+			if(this.operator.getTaxList().isEmpty()) throw new RuntimeException("You cannot build Operator without Taxs");
+			
+			Collections.sort(this.operator.getTaxList());
 			return this.operator;
 		}
 		
-	}
-
-
-	public Tax getChepeastPrice(String phoneNumber) {
-		
-		// fazer o match para pegar a menor taxa c  maior prefixo
-			
-		return null;
 	}
 	
 }

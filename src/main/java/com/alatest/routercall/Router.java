@@ -20,10 +20,21 @@ public class Router {
 
 	public Result dial(String phoneNumber) {
 		
-		List<Tax> operatorsPrices = new ArrayList<Tax>();
+		Tax tax = this.operators.get(0).getCheapestPrice(phoneNumber);
+		String operatorName = this.operators.get(0).getName();
+		Tax currentTax = null ;
 		
-		for(Operator operator : this.operators){
-			operatorsPrices.add( operator.getChepeastPrice(phoneNumber) );
+		for(int index = 1; index < this.operators.size() ; index++) {
+			currentTax = this.operators.get(index).getCheapestPrice(phoneNumber);
+			
+			if(currentTax !=null && currentTax.prefixGreaterOrEqual(tax) && currentTax.lessThan(tax) ){
+				tax = currentTax;
+				operatorName = this.operators.get(index).getName();
+			}
+		}
+		
+		if(tax!=null) {
+			return new Result(operatorName,tax);
 		}
 		
 		return null;
@@ -33,19 +44,23 @@ public class Router {
 	public class Result {
 		
 		private String operatorName;
-		private Tax tax;
+		private Tax cheapestTax;
+		
+		private Result(String name,Tax tax){
+			this.operatorName = name;
+			this.cheapestTax = tax;
+		}
 		
 		public String getOperatorName() {
 			return operatorName;
 		}
 		
-		public Double getPrice() {
-			
-			return this.tax.getPrice();
+		public Double getCheapestPrice() {
+			return this.cheapestTax.getPrice();
 		}
 		
-		public String getPrefix() {
-			return this.tax.getPrefix();
+		public String getMatchedPrefix() {
+			return this.cheapestTax.getPrefix();
 		}
 		
 	}

@@ -21,9 +21,16 @@ public class Tax implements Comparable<Tax> {
 	public Double getPrice() {
 		return price;
 	}
-
+	
+	public boolean lessThan(Tax other) {
+		return this.getPrice().compareTo( other.getPrice() ) < 0;
+	}
+	
+	public boolean prefixGreaterOrEqual(Tax other) {
+		return this.compareTo(other) <=0;
+	}
 
 	public int compareTo(Tax other) {
-		return Integer.valueOf(this.prefix.length()).compareTo(other.prefix.length()) ;
+		return Integer.valueOf(other.prefix.length()).compareTo(this.prefix.length()) ;
 	}
 }
