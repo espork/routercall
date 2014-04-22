@@ -1,6 +1,7 @@
 package com.alatest.routercall;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Router {
@@ -12,10 +13,7 @@ public class Router {
 	}
 	
 	private Router (Operator ...operators){
-		
-		for(Operator operator : operators)
-			this.operators.add(operator);
-		
+		Arrays.asList(operators).forEach( this.operators::add);
 	}
 
 	public Result dial(String phoneNumber) {

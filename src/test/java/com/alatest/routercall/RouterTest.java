@@ -1,7 +1,10 @@
 package com.alatest.routercall;
 
 import static com.alatest.routercall.Operator.OperatorBuilder.operator;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.util.function.BiFunction;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,23 +19,26 @@ public class RouterTest {
 	
 	@BeforeClass
 	public static void setUp(){
+		
+		BiFunction<String, Double, Tax> taxFactory = Tax::new;
+		
 		operatorA = operator("Operator A")
-			.add(new Tax("1", 0.99d))
-			.add(new Tax("268", 5.1d))
-			.add(new Tax("46", 0.17d))
-			.add(new Tax("4620", 0.0d))
-			.add(new Tax("468", 0.15d))
-			.add(new Tax("4631", 0.15d))
-			.add(new Tax("4673", 0.9d))
-			.add(new Tax("46732", 1.1d))
+			.add(taxFactory.apply("1", 0.99d))
+			.add(taxFactory.apply("268", 5.1d))
+			.add(taxFactory.apply("46", 0.17d))
+			.add(taxFactory.apply("4620", 0.0d))
+			.add(taxFactory.apply("468", 0.15d))
+			.add(taxFactory.apply("4631", 0.15d))
+			.add(taxFactory.apply("4673", 0.9d))
+			.add(taxFactory.apply("46732", 1.1d))
 			.build();
 		
 		operatorB = operator("Operator B")
-				.add(new Tax("1", 0.92d))
-				.add(new Tax("44", 0.5d))
-				.add(new Tax("46", 0.2d))
-				.add(new Tax("467", 1.0d))
-				.add(new Tax("48", 1.2d))
+				.add(taxFactory.apply("1", 0.92d))
+				.add(taxFactory.apply("44", 0.5d))
+				.add(taxFactory.apply("46", 0.2d))
+				.add(taxFactory.apply("467", 1.0d))
+				.add(taxFactory.apply("48", 1.2d))
 				.build();
 	}
 	

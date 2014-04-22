@@ -1,10 +1,15 @@
 package com.alatest.routercall;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparingInt;
 
 public class Operator {
 
@@ -30,18 +35,9 @@ public class Operator {
 	
 	public Tax getCheapestPrice(String phoneNumber) {
 		
-		Pattern pattern = null;
-		Matcher matcher = null;
+		Optional<Tax> taxOptional =  taxList.stream().filter( tax -> Pattern.compile("^"+tax.getPrefix()).matcher(phoneNumber).find() ).findFirst();
 		
-		for(Tax tax : this.taxList){
-			
-			pattern = Pattern.compile("^"+tax.getPrefix());
-			matcher = pattern.matcher(phoneNumber);
-			
-			if(matcher.find()) return tax;
-		}
-			
-		return null;
+		return taxOptional.orElse(null);
 	}
 	
 	
@@ -63,8 +59,9 @@ public class Operator {
 		
 		public Operator build(){
 			if(this.operator.getTaxList().isEmpty()) throw new RuntimeException("You cannot build Operator without Taxs");
+
+			this.operator.getTaxList().sort( comparingInt(Tax::getPrefixLengh).reversed() );
 			
-			Collections.sort(this.operator.getTaxList());
 			return this.operator;
 		}
 		

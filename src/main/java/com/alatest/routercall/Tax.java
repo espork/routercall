@@ -17,6 +17,10 @@ public class Tax implements Comparable<Tax> {
 		return prefix;
 	}
 	
+	public int getPrefixLengh(){
+		return this.prefix.length();
+	}
+	
 	
 	public Double getPrice() {
 		return price;
@@ -32,5 +36,9 @@ public class Tax implements Comparable<Tax> {
 
 	public int compareTo(Tax other) {
 		return Integer.valueOf(other.prefix.length()).compareTo(this.prefix.length()) ;
+	}
+	
+	public String toString() {
+		return "[ prefix :" + prefix + " --- price : " + price.toString() + " ]";
 	}
 }
